@@ -1,1 +1,1 @@
-from .preprocess import clean_text
+from .preprocess import preprocess_dataframe
