@@ -1,0 +1,42 @@
+name: Release lib-ml
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Extract version from tag and update __version__.py
+        run: |
+          VERSION_TAG="${GITHUB_REF##*/}"
+          VERSION="${VERSION_TAG#v}"
+          echo "__version__ = \"${VERSION}\"" > __version__.py
+
+      - name: Install dependencies
+        run: |
+          pip install setuptools wheel
+
+      - name: Build package
+        run: python setup.py sdist bdist_wheel
+
+      - name: Upload to GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: |
+            dist/*.tar.gz
+            dist/*.whl
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
