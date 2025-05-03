@@ -17,11 +17,11 @@ jobs:
         with:
           python-version: '3.9'
 
-      - name: Extract version from tag and update __version__.py
+      - name: Extract version from tag and write to VERSION file
         run: |
           VERSION_TAG="${GITHUB_REF##*/}"
           VERSION="${VERSION_TAG#v}"
-          echo "__version__ = \"${VERSION}\"" > __version__.py
+          echo "$VERSION" > preprocess_sentiment_analysis/VERSION
 
       - name: Install dependencies
         run: |
@@ -39,4 +39,4 @@ jobs:
             dist/*.tar.gz
             dist/*.whl
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}

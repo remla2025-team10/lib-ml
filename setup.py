@@ -1,8 +1,14 @@
 from setuptools import setup, find_packages
+import os
+
+# read the version
+def read_version():
+    with open(os.path.join("preprocess_sentiment_analysis", "VERSION"), "r") as file:
+        return file.read().strip()
 
 setup(
     name='preprocess-sentiment-analysis',
-    version='0.0.2', # TODO: Automatic versioning
+    version=read_version(),
     packages=find_packages(),
     install_requires=['nltk', 'pandas'],
     author='REMLA 2025 Team 10',
